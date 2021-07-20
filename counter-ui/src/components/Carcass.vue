@@ -1,7 +1,7 @@
 <template>
   <el-tabs id="h" type="border-card">
-    <el-tab-pane label="Project info"><Info></Info></el-tab-pane>
-    <el-tab-pane label="Other">Nothing there</el-tab-pane>
+    <el-tab-pane label="Prometheus"><Info></Info></el-tab-pane>
+    <el-tab-pane label="KubeAPI">Nothing there</el-tab-pane>
   </el-tabs>
 </template>
 

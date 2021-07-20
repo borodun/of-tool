@@ -18,7 +18,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="Choose pod">
-        <el-select v-model="pod" placeholder="Select" v-on:focus="ShowPods" v-on:change="GetCPUMEM">
+        <el-select v-model="podsSelected" placeholder="Select" v-on:focus="ShowPods" v-on:change="GetCPUMEM" multiple>
           <el-option
               v-for="item in pods"
               :key="item.pod"
@@ -33,6 +33,11 @@
             :data="info"
             border
             style="width: 100%">
+          <el-table-column
+              prop="pod"
+              label="Pod Name"
+              width="180">
+          </el-table-column>
           <el-table-column
               prop="cpu"
               label="CPU"
@@ -62,11 +67,12 @@ export default {
   data() {
     return {
       namespace: "",
-      pod: "",
+      podsSelected: [],
 
       info: [{
-        cpu: "1",
-        mem: "1",
+        pod: "",
+        cpu: "",
+        mem: ""
       }],
 
       namespaces: [{
@@ -79,9 +85,23 @@ export default {
     }
   },
   methods: {
-    GetCPUMEM(){
-      this.GetCPU()
-      this.GetMEM()
+    GetCPUMEM() {
+      console.log("Selected:")
+      console.log(this.podsSelected)
+      this.info = [{
+        pod: "",
+        cpu: "",
+        mem: ""
+      }]
+
+      for (let i = 0; i < this.podsSelected.length; i++) {
+        this.GetCPU(this.podsSelected[i], i)
+        this.GetMEM(this.podsSelected[i], i)
+        this.info[i].pod = this.podsSelected[i]
+        this.info.push({pod: "", cpu: "", mem: ""})
+      }
+
+      this.info.splice(this.info.length - 1, 1)
     },
     ShowNamespaces() {
       axios_instance.get("/get-namespaces").then((response) => {
@@ -109,26 +129,26 @@ export default {
         console.log(error);
       })
     },
-    GetCPU() {
-      axios_instance.get("/get-cpu/" + this.pod).then((response) => {
+    GetCPU(podName, i) {
+      axios_instance.get("/get-cpu/" + podName).then((response) => {
         console.log(response.data)
         if (response.data.err !== null) {
           console.log("error")
         } else {
-          this.info[0].cpu = response.data.rs
+          this.info[i].cpu = response.data.rs
           console.log(this.pods)
         }
       }).catch(function (error) {
         console.log(error);
       })
     },
-    GetMEM() {
-      axios_instance.get("/get-mem/" + this.pod).then((response) => {
+    GetMEM(podName, i) {
+      axios_instance.get("/get-mem/" + podName).then((response) => {
         console.log(response.data)
         if (response.data.err !== null) {
           console.log("error")
         } else {
-          this.info[0].mem = response.data.rs
+          this.info[i].mem = response.data.rs
           console.log(this.pods)
         }
       }).catch(function (error) {
