@@ -136,7 +136,6 @@ export default {
           console.log("error")
         } else {
           this.info[i].cpu = response.data.rs
-          console.log(this.pods)
         }
       }).catch(function (error) {
         console.log(error);
@@ -149,7 +148,6 @@ export default {
           console.log("error")
         } else {
           this.info[i].mem = response.data.rs
-          console.log(this.pods)
         }
       }).catch(function (error) {
         console.log(error);

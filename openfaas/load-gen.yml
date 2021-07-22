@@ -1,0 +1,10 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://178.170.194.224:31112
+functions:
+  load-gen:
+    lang: go
+    handler: ./load-gen
+    image: borodun/load-gen:latest
+

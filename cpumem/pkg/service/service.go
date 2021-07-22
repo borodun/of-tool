@@ -31,7 +31,7 @@ type CpumemService interface {
 type basicCpumemService struct{}
 
 func (b *basicCpumemService) GetCPU(ctx context.Context, podName string) (rs string, err error) {
-	queryStr := fmt.Sprintf("container_cpu_usage_seconds_total{pod=~\"%s\", container!=\"\", container!=\"POD\"}", podName)
+	queryStr := fmt.Sprintf("container_cpu_usage_seconds_total{container=\"%s\"}", podName)
 	param := req.Param{
 		"query": queryStr,
 	}
