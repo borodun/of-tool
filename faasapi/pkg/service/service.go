@@ -45,7 +45,7 @@ func (b *basicFaasapiService) InvokeFunction(ctx context.Context, functionName s
 	requestStr := fmt.Sprintf("/function/%s", functionName)
 	authHeader := req.Header{
 		"Accept":        "application/json",
-		"Authorization": "Basic YWRtaW46MzRvMklIcVRMMUVzbE4zMkY5MTB5UDdrQw==",
+		"Authorization": "Basic ",
 	}
 
 	r, err := req.Get(OpenFaaSAPI+requestStr, authHeader, requestBody)
