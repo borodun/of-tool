@@ -23,6 +23,7 @@ const (
 type Metric struct {
 	Namespace string `json:"namespace"`
 	Pod       string `json:"pod"`
+	Container string `json:"container"`
 }
 
 type Value struct {

@@ -6,32 +6,32 @@ import (
 	"fmt"
 	"github.com/imroc/req"
 	"log"
+	"os"
 )
 
-var (
-	prometheusAPIAddr = "http://178.170.194.224:8080/api/v1/"
-)
+var prometheusAPIAddr = os.Getenv("PROM_API_URL")
 
 type Namespace struct {
 	Namespace string `json:"namespace"`
 }
 
 type Pod struct {
-	Pod string `json:"pod"`
+	Pod       string `json:"pod"`
+	Container string `json:"container"`
 }
 
 // CpumemService describes the service.
 type CpumemService interface {
-	GetCPU(ctx context.Context, podName string) (rs string, err error)
-	GetMEM(ctx context.Context, podName string) (rs string, err error)
+	GetCPU(ctx context.Context, containerName string) (rs string, err error)
+	GetMEM(ctx context.Context, containerName string) (rs string, err error)
 	GetNamespaces(ctx context.Context) (namespaces []Namespace, err error)
 	GetPods(ctx context.Context, namespace string) (pods []Pod, err error)
 }
 
 type basicCpumemService struct{}
 
-func (b *basicCpumemService) GetCPU(ctx context.Context, podName string) (rs string, err error) {
-	queryStr := fmt.Sprintf("container_cpu_usage_seconds_total{container=\"%s\"}", podName)
+func (b *basicCpumemService) GetCPU(ctx context.Context, containerName string) (rs string, err error) {
+	queryStr := fmt.Sprintf("sum(container_cpu_usage_seconds_total{container=\"%s\"})", containerName)
 	param := req.Param{
 		"query": queryStr,
 	}
@@ -43,8 +43,8 @@ func (b *basicCpumemService) GetCPU(ctx context.Context, podName string) (rs str
 
 	return resp.Data.Results[0].Value[1], err
 }
-func (b *basicCpumemService) GetMEM(ctx context.Context, podName string) (rs string, err error) {
-	queryStr := fmt.Sprintf("container_memory_usage_bytes{pod=~\"%s\", container!=\"\", container!=\"POD\"}", podName)
+func (b *basicCpumemService) GetMEM(ctx context.Context, containerName string) (rs string, err error) {
+	queryStr := fmt.Sprintf("sum(container_cpu_usage_seconds_total{container=\"%s\"})", containerName)
 	param := req.Param{
 		"query": queryStr,
 	}
@@ -79,7 +79,7 @@ func (b *basicCpumemService) GetNamespaces(ctx context.Context) (namespaces []Na
 	return namespaces, err
 }
 func (b *basicCpumemService) GetPods(ctx context.Context, namespace string) (pods []Pod, err error) {
-	queryStr := fmt.Sprintf("kube_pod_info{namespace=\"%s\"}", namespace)
+	queryStr := fmt.Sprintf("kube_pod_container_info{namespace=\"%s\"}", namespace)
 	param := req.Param{
 		"query": queryStr,
 	}
@@ -95,6 +95,7 @@ func (b *basicCpumemService) GetPods(ctx context.Context, namespace string) (pod
 	pods = make([]Pod, len(resp.Data.Results))
 	for i := range pods {
 		pods[i].Pod = resp.Data.Results[i].Metric.Pod
+		pods[i].Container = resp.Data.Results[i].Metric.Container
 	}
 
 	return pods, err

@@ -7,9 +7,15 @@ import (
 	"fmt"
 	"github.com/imroc/req"
 	"log"
+	"os"
 )
 
-const OpenFaaSAPI = "http://178.170.194.224:31112"
+var OpenFaaSAPI = os.Getenv("OPEN_FAAS_URL")
+var Auth = os.Getenv("AUTH")
+var authHeader = req.Header{
+	"Accept":        "application/json",
+	"Authorization": "Basic " + Auth,
+}
 
 // FaasapiService describes the service.
 type FaasapiService interface {
@@ -21,10 +27,6 @@ type basicFaasapiService struct{}
 
 func (b *basicFaasapiService) ListFunctions(ctx context.Context) (functions []string, err error) {
 	requestStr := fmt.Sprintf("/system/functions")
-	authHeader := req.Header{
-		"Accept":        "application/json",
-		"Authorization": "Basic YWRtaW46MzRvMklIcVRMMUVzbE4zMkY5MTB5UDdrQw==",
-	}
 
 	r, err := req.Get(OpenFaaSAPI+requestStr, authHeader)
 	log.Printf("%+v", r)
@@ -43,10 +45,6 @@ func (b *basicFaasapiService) ListFunctions(ctx context.Context) (functions []st
 }
 func (b *basicFaasapiService) InvokeFunction(ctx context.Context, functionName string, requestBody string) (rs string, err error) {
 	requestStr := fmt.Sprintf("/function/%s", functionName)
-	authHeader := req.Header{
-		"Accept":        "application/json",
-		"Authorization": "Basic ",
-	}
 
 	r, err := req.Get(OpenFaaSAPI+requestStr, authHeader, requestBody)
 	log.Printf("%+v", r)

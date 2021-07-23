@@ -17,14 +17,16 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="Choose pod">
+      <el-form-item label="Choose containers">
         <el-select v-model="podsSelected" placeholder="Select" v-on:focus="ShowPods" v-on:change="GetCPUMEM" multiple>
           <el-option
               v-for="item in pods"
-              :key="item.pod"
+              :key="item.container"
               :label="item.pod"
-              :value="item.pod">
-            <span style="float: left">{{ item.pod }}</span>
+              :value="item.container"
+              clearable>
+            <span style="float: left; white-space: pre;">{{ item.container }}     </span>
+            <span style="float: right; color: #8492a6; font-size: 13px; white-space: pre;">     {{ item.pod }}</span>
           </el-option>
         </el-select>
       </el-form-item>
@@ -80,6 +82,7 @@ export default {
       }],
       pods: [{
         pod: "",
+        container: ""
       }]
 
     }
@@ -129,8 +132,8 @@ export default {
         console.log(error);
       })
     },
-    GetCPU(podName, i) {
-      axios_instance.get("/get-cpu/" + podName).then((response) => {
+    GetCPU(containerName, i) {
+      axios_instance.get("/get-cpu/" + containerName).then((response) => {
         console.log(response.data)
         if (response.data.err !== null) {
           console.log("error")
@@ -141,8 +144,8 @@ export default {
         console.log(error);
       })
     },
-    GetMEM(podName, i) {
-      axios_instance.get("/get-mem/" + podName).then((response) => {
+    GetMEM(containerName, i) {
+      axios_instance.get("/get-mem/" + containerName).then((response) => {
         console.log(response.data)
         if (response.data.err !== null) {
           console.log("error")
