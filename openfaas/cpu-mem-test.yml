@@ -1,0 +1,10 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://127.0.0.1:8080
+functions:
+  cpu-mem-test:
+    lang: cpu-mem-go-template
+    handler: ./cpu-mem-test
+    image: borodun/cpu-mem-test:latest
+
