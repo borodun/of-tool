@@ -1,8 +1,0 @@
-/fwatchdog
-/watchdog
-/classic-watchdog
-/bin/**
-/vendor/
-/measurements/
-/fprocess/
-/bin/

@@ -123,7 +123,7 @@ func getEndpointMiddleware(logger log.Logger) (mw map[string][]endpoint1.Middlew
 		Help:      "Request duration in seconds.",
 		Name:      "request_duration_seconds",
 		Namespace: "example",
-		Subsystem: "cpumem",
+		Subsystem: "prometheus-api",
 	}, []string{"method", "success"})
 	addDefaultEndpointMiddleware(logger, duration, mw)
 	// Add you endpoint middleware here

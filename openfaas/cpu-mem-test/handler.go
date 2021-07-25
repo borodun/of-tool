@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"strconv"
+	"time"
 )
 
 const MaxUint = ^uint(0)
@@ -21,6 +22,8 @@ func Handle(req []byte) string {
 	if value > int64(MaxInt) {
 		return fmt.Sprintf("The numbeer is too large, bie")
 	}
+
+	time.Sleep(time.Second)
 
 	startStr := fmt.Sprintf("Starting generating load with value of %d\n", value)
 
