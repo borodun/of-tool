@@ -5,6 +5,6 @@ provider:
 functions:
   cpu-mem-test:
     lang: cpu-mem-go
-    handler: ./cpu-mem-test
-    image: borodun/cpu-mem-test:latest
+    handler: ./cpu-test
+    image: borodun/cpu-test:latest
 

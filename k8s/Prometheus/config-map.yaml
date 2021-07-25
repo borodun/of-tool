@@ -184,3 +184,30 @@ data:
         - source_labels: [__meta_kubernetes_pod_host_ip]
           action: replace
           target_label: host_ip
+
+      - job_name: 'of-metrics'
+
+        kubernetes_sd_configs:
+        - role: pod
+
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_node_name]
+          action: replace
+          target_label: kubernetes_node_name
+        - source_labels: [__meta_kubernetes_namespace]
+          action: replace
+          target_label: kubernetes_namespace
+        - source_labels: [__meta_kubernetes_pod_name]
+          action: replace
+          target_label: kubernetes_pod_name
+        - source_labels: [__address__]
+          action: replace
+          regex: ([^:]+)(?::\d+)?
+          replacement: ${1}:8080
+          target_label: __address__
+        - source_labels: [__meta_kubernetes_pod_label_app]
+          action: keep
+          regex: of-metrics
+        - source_labels: [__meta_kubernetes_pod_host_ip]
+          action: replace
+          target_label: host_ip

@@ -14,24 +14,25 @@ const MinInt = -MaxInt - 1
 
 // Handle a serverless request
 func Handle(req []byte) string {
-	value, err := strconv.ParseInt(string(req), 10, 64)
+	sec, err := strconv.ParseInt(string(req), 10, 64)
 
 	if err != nil {
 		return fmt.Sprintf("Error: %s", err.Error())
 	}
-	if value > int64(MaxInt) {
+	if sec > int64(MaxInt) {
 		return fmt.Sprintf("The numbeer is too large, bie")
 	}
 
+	startStr := fmt.Sprintf("Generating load for %d sec + 1 sec of sleep\n", sec)
+
 	time.Sleep(time.Second)
-
-	startStr := fmt.Sprintf("Starting generating load with value of %d\n", value)
-
 	sqrtSum := float64(0)
-	for i := int64(0); i < value; i++ {
+	startTime := time.Now()
+	for i := int64(0); time.Since(startTime) < time.Second*time.Duration(sec); i++ {
 		sqrtSum += math.Sqrt(float64(i))
 	}
-	finishStr := fmt.Sprintf("Result value %s\n", strconv.FormatFloat(sqrtSum, 'f', 10, 64))
+
+	finishStr := fmt.Sprintf("Result sum: %s\n", strconv.FormatFloat(sqrtSum, 'f', 10, 64))
 
 	return startStr + finishStr
 }
