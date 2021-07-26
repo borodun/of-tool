@@ -25,21 +25,14 @@ func Handle(req []byte) string {
 
 	startStr := fmt.Sprintf("Generating load for %d sec + 1 sec of sleep\n", sec)
 
-	go func() {
-		time.Sleep(time.Second)
-		sqrtSum := float64(0)
-		startTime := time.Now()
-		for i := int64(0); time.Since(startTime) < time.Second*time.Duration(sec); i++ {
-			sqrtSum += math.Sqrt(float64(i))
-
-		}
-	}()
-
 	time.Sleep(time.Second)
 	sqrtSum := float64(0)
 	startTime := time.Now()
 	for i := int64(0); time.Since(startTime) < time.Second*time.Duration(sec); i++ {
 		sqrtSum += math.Sqrt(float64(i))
+		if sqrtSum > 1e9 {
+			sqrtSum = 0
+		}
 	}
 
 	finishStr := fmt.Sprintf("Result sum: %s\n", strconv.FormatFloat(sqrtSum, 'f', 10, 64))
