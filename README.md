@@ -1,4 +1,4 @@
-# What this is about
+# What is this
 This is a studying project for learning k8s, OpenFaaS, Prometheus and a little of frontend
 
 ## Repo structure

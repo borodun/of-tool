@@ -1,0 +1,16 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://127.0.0.1:30000
+functions:
+  cpu-load-2threads:
+    lang: cpu-mem-go
+    handler: ./cpu-load-2threads
+    image: borodun/cpu-load-2threads:latest
+    environment:
+      write_timeout: 3m
+      read_timeout: 3m
+      exec_timeout: 3m
+      function_name: cpu-load-2threads
+      mongo_uri: mongodb://login:pwd@node:port/db
+
