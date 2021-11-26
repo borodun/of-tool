@@ -1,5 +1,5 @@
 # What is this
-This is a studying project for learning k8s, OpenFaaS, Prometheus and a little of frontend
+This is a study project for learning k8s, OpenFaaS, Prometheus and a little of frontend
 
 ## Repo structure
 - **faas-ui** - Vue with element-plus framework and axios. Test project for learning how frontend works
